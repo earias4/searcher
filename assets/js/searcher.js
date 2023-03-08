@@ -13,7 +13,7 @@ let cargarXML = (myURLx)=>{
     .then(result => {
 
         let xml=(new DOMParser()).parseFromString(result,'application/xml');
-        console.log(xml)
+        
 
         let listaProductos = xml.getElementsByTagName("product");
         
@@ -26,8 +26,7 @@ let cargarXML = (myURLx)=>{
             let type = hijos[3].innerHTML;
             
             let child = {'name':name,'price':price,'src':src,'type':type}
-            console.log("CHILD");
-            console.log(child)
+            
             jsonProds.push(child);
             
         }
@@ -55,13 +54,11 @@ let loadProducts = ( myURLj, jsonProd,keyword = "") => {
         elem.innerHTML = ""
         
         let result2 = result.concat(jsonProd);
-        console.log("RESULT 2");
-        console.log(result2);
         
-        let filtrados = result2.filter(item => item.type == keyword || item.name == keyword )
+        
+        
+        let filtrados = result2.filter(item => item.type.includes(keyword) || item.name.includes(keyword));
         let tamano = filtrados.length;
-        console.log("tamano")
-        console.log(tamano)
 
         if (tamano>0){
             result2=[...filtrados];
@@ -108,82 +105,23 @@ let loadProducts = ( myURLj, jsonProd,keyword = "") => {
         
           });
     
-    })
-
-    // fetch( myURLx )
-    // .then(response => response.text() ) 
-    // .then(result => {
-
-    //     let xml=(new DOMParser()).parseFromString(result,'application/xml');
-    //     console.log(xml)
-
-    //     let listaProductos = xml.getElementsByTagName("product");
-    //     console.log(listaProductos);
-    //     let llenar = document.getElementById("llenar");
-
-    //     for (let elem of listaProductos){
-    //         let hijos = elem.children;
-            
-    //         let name = hijos[0].innerHTML;
-    //         let price = hijos[1].innerHTML;
-    //         let src = hijos[2].innerHTML;
-    //         let type = hijos[3].innerHTML;
-
-    //         plantilla = `
-    //         <div class="col-xl-3 col-md-6 mb-xl-0 mb-4 mt-4">
-    //         <div class="card card-blog card-plain">
-    //           <div class="card-header p-0 mt-n4 mx-3">
-    //             <a class="d-block shadow-xl border-radius-xl">
-    //               <img src="${src}" alt="${name}" class="img-fluid shadow border-radius-xl">
-    //             </a>
-    //           </div>
-    //           <div class="card-body p-3">
-    //             <p class="mb-0 text-sm">${type}</p>
-    //             <a href="javascript:;">
-    //               <h5>
-    //                 ${name}
-    //               </h5>
-    //             </a>
-    //             <p class="mb-4 text-sm">
-    //               <b>Price: </b> $ ${price}
-    //             </p>
-    //           </div>
-    //         </div>
-    //       </div>`
-        
-    //     llenar.innerHTML+=plantilla;
-          
-
-    //     }
-
-    //     console.log(plantilla)
-    
-    // })
-    // .catch(error => {
-    //   /* Callback por fallo: Procese el error */
-    //   console.log( error );
-    // });
-  
-}
+    })}
 
 
 
 
-let jsonX = cargarXML(URLx);
-console.log("MAIN");
-console.log(jsonX);
 
-loadProducts(URLj,jsonX);
 
 
 let element = document.getElementById('filter');
 
 element.onclick = (event) => {
-    console.log("Click");
     let keyword = document.getElementById('text').value;
-    console.log(keyword)
     loadProducts(URLj,jsonX,keyword);
 };
 
+let jsonX = cargarXML(URLx);
+
+loadProducts(URLj,jsonX);
 
   
